@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE mapper  
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.javaee.scms.mapper.UserMapper">
+
+<select id="findAllUser" resultType="user">
+	select * from user
+</select>
+
+<update id="update" parameterType="user">
+	update user set username=#{username}, password=#{password}, role=#{role}, registerTime=#{registerTime} where id=#{id}
+</update>
+
+<select id="findById" parameterType="int" resultType="user">
+	select * from user where id=#{id}
+</select>
+
+<select id="findByUsername" parameterType="String" resultType="user">
+	select * from user where username=#{username}
+</select>
+
+<insert id="add" parameterType="user">
+	insert into user values(#{id},#{username},#{password},#{role},#{registerTime})
+</insert>
+
+<delete id="delete" parameterType="int">
+	delete from user where id=#{id}
+</delete>
+
+</mapper>

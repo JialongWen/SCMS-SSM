@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+	<!-- 配置容器组件的扫描包
+		用来指定DispatcherServlet将哪个包中的类进行扫描
+		扫描这些类的注解，根据其注解将这些类实例化，作为容器中的组件
+		base-package属性即设置要扫描的包
+		容器中包括Controller，Service，Handler
+	 -->
+    <context:component-scan base-package="com.javaee.scms.web"/>
+
+    <!-- 配置根视图：欢迎视图，首页 -->
+    <mvc:view-controller path="/" view-name="index"/>
+    
+    <!-- 配置静态资源的请求映射关系 -->
+    <mvc:resources location="/resources/" mapping="/resources/**"></mvc:resources>
+    
+    <!-- 配置SpringMVC的注解驱动
+    	让SpringMVC去加载默认的各种Handler，Adapter
+     -->
+    <mvc:annotation-driven></mvc:annotation-driven>
+    
+    <!-- 配置拦截列表 -->
+    <mvc:interceptors>
+    	<!-- 配置单个拦截器 -->
+    	<mvc:interceptor>
+    		<mvc:mapping path="/*"/>
+    		<bean id="loginInterceptor" class="com.javaee.scms.interceptors.LoginInterceptor"></bean>
+    	</mvc:interceptor>
+    
+    </mvc:interceptors>
+    
+    <!-- 配置文件上传的文件处理器 -->
+    <bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	    <!-- 上传文件大小的上限 单位为字节 20M=1024*1024*20 1024bytes=1K 1024K=1M-->
+	    <property name="maxUploadSize" value="20971520"/>
+	    <!-- 设置表单文件的编码字符集 -->
+	    <property name="defaultEncoding" value="UTF-8"></property>
+	</bean>
+    
+    
+    <!-- 视图解析器
+    	将Controller返回的String与prefix和suffix拼接成结果视图的资源
+    	prefix + return + suffix
+    	/WEB-INF/pages/success.jsp
+     -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    	<!-- 视图解析器的前缀 -->
+    	<property name="prefix" value="/WEB-INF/pages/"/>
+    	<!-- 视图解析器的后缀 -->
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    
+   <!--  注册自定义的异常处理器 -->
+   <bean class="com.javaee.scms.exception.ExceptionHandler"></bean>
+   
+   <!-- 配置对AOP注解的支持
+   	属性 proxy-target-class设置为true，设定使用cglib的方式进行代理
+    -->
+   <aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>
+   
+</beans>

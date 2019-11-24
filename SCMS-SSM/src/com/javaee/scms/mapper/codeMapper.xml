@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE mapper  
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.javaee.scms.mapper.CodeMapper">
+
+<insert id="add" parameterType="code">
+	insert into code values(#{id},#{codename},#{filepath},#{intro},#{owner.id},#{addTime})
+</insert>
+
+<select id="findAllCode" resultType="code">
+	select * from code
+</select>
+
+<select id="findById" parameterType="int" resultType="code">
+	select * from code where id=#{id}
+</select>
+
+<update id="update" parameterType="code">
+	update code set codename=#{codename}, filepath=#{filepath}, intro=#{intro}, owner=#{owner.id}, addTime=#{addTime} where id=#{id}
+</update>
+
+<delete id="delete" parameterType="int">
+	delete from code where id=#{id}
+</delete>
+</mapper>
